@@ -11,7 +11,7 @@ public:
   size_t getNumRows() const;
   size_t getNumColumns() const;
   Matrix getTransposeMatrix() const;
-  //void row_multiply(const Matrix&, const Matrix&, const bool, const size_t, const size_t, raw_matrix&) const;
+  void row_multiply(const Matrix&, const Matrix&, const bool, const size_t, const size_t, raw_matrix&) const;
   Matrix multiply(const Matrix&, const bool, const int) const;
   bool operator==(const Matrix&) const;
 private:
