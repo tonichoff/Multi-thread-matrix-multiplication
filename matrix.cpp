@@ -71,8 +71,13 @@ Matrix Matrix::multiply(const Matrix& matrix_B, const bool transpose, const int 
     row_multiply(*this, right_matrix, transpose, 0, this->num_rows_, result);
   else {
     std::vector<std::thread> threads;
-    for (int i = 0; i < num_threads; i++)
-      threads.push_back(std::thread(&Matrix::row_multiply, this, right_matrix, transpose, 0, this->num_rows_, result));
+    int size_of_part = this->num_rows_ / num_threads;
+    for (int i = 0; i < num_threads; i++) {
+      int from = size_of_part * i;
+      int to = size_of_part * (i + 1);
+      to += (i == num_threads - 1) ? this->num_rows_ % num_threads : 0;
+      threads.push_back(std::thread([&]() {this->row_multiply(*this, right_matrix, transpose, from, to, result); }));
+    }
     for (int i = 0; i < threads.size(); i++)
       threads[i].join();
   }
